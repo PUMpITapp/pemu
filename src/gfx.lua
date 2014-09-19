@@ -6,22 +6,22 @@ local gfx = {}
 
 Surface = {}
 
-function Surface:new(width, height)
-  o = {x=0, y=0, w=width, h=height, r=0, g=0, b=0, a=0}
+function Surface:new(w, h)
+  o = {x=0, y=0, w=w, h=h, r=0, g=0, b=0, a=0}
   self.__index = self
   self.__cref = surface_new(o.x, o.y, o.w, o.h, o.r, o.g, o.b, o.a)
   return setmetatable(o, self)
 end
 
-function Surface:clear()
+function Surface:clear(c, r)
   print("Not implemented yet.")
 end
 
-function Surface:fill()
-  print("Not implemented yet.")
+function Surface:fill(c, r)
+  surface_fill(self.__cref, c.r, c.g, c.b, c.a, r.x, r.y, r.w, r.h)
 end
 
-function Surface:copyfrom()
+function Surface:copyfrom(ss, sr, dr, b)
   print("Not implemented yet.")
 end
 
@@ -33,11 +33,11 @@ function Surface:get_height()
   return self.h
 end
 
-function Surface:get_pixel()
+function Surface:get_pixel(x, y)
   print("Not implemented yet.")
 end
 
-function Surface:set_pixel()
+function Surface:set_pixel(x, y, c)
   print("Not implemented yet.")
 end
 
@@ -46,7 +46,7 @@ function Surface:premultiply()
 end
 
 function Surface:destroy()
-  print("Not implemented yet.")
+  surface_destroy(self.__cref)
 end
 
 
@@ -60,10 +60,10 @@ function gfx.set_auto_update()
 end
 
 function gfx.new_surface(width, height)
-  if width < 0 then
+  if width < 0 or width > 9999 then
     error("invalid width")
   end
-  if height < 0 then
+  if height < 0 or height > 9999 then
     error("invalid height")
   end
   return Surface:new(width, height)

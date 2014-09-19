@@ -4,6 +4,9 @@
 #include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>
+#include <SDL2/SDL.h>
+
+extern SDL_Window *window;
 
 int gfx_set_auto_update(lua_State *L);
 int gfx_new_surface(lua_State *L);

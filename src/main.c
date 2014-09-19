@@ -31,6 +31,12 @@ lua_console(void *ptr) {
   lua_setglobal(L, "gfx_get_memory_limit");
   lua_pushcfunction(L, &surface_new);
   lua_setglobal(L, "surface_new");
+  lua_pushcfunction(L, &surface_fill);
+  lua_setglobal(L, "surface_fill");
+  lua_pushcfunction(L, &gfx_update);
+  lua_setglobal(L, "gfx_update");
+  lua_pushcfunction(L, &surface_destroy);
+  lua_setglobal(L, "surface_destroy");
 
   while (fgets(buff, sizeof(buff), stdin) != NULL) {
     error = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0

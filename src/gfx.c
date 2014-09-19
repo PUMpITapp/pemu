@@ -24,7 +24,8 @@ gfx_get_memory_limit(lua_State *L) {
 
 int
 gfx_update(lua_State *L) {
-  return 1;
+  SDL_UpdateWindowSurface(window);
+  return 0;
 }
 
 int
