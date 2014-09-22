@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-c -Wall
+CFLAGS=-c -Wall -Werror -ansi -pedantic
 LDFLAGS=-llua -framework SDL2
 EXEC=pemu
 SRC= $(wildcard *.c)
@@ -10,7 +10,7 @@ all: $(EXEC)
 pemu: $(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-pemu.o: surface.h gfx.h
+pemu.o: utils.h surface.h gfx.h
 
 %.o: %.c
 	$(CC) -o $@ -c $< $(CFLAGS)

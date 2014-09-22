@@ -19,6 +19,48 @@ sdl_event_loop() {
     }
 }
 
+static void
+lua_register_c_functions(lua_State *L) {
+  /* GFX */
+  lua_pushcfunction(L, &gfx_set_auto_update);
+  lua_setglobal(L, "gfx_set_auto_update");
+  lua_pushcfunction(L, &gfx_new_surface);
+  lua_setglobal(L, "gfx_new_surface");
+  lua_pushcfunction(L, &gfx_get_memory_use);
+  lua_setglobal(L, "gfx_get_memory_use");
+  lua_pushcfunction(L, &gfx_get_memory_limit);
+  lua_setglobal(L, "gfx_get_memory_limit");
+  lua_pushcfunction(L, &gfx_update);
+  lua_setglobal(L, "gfx_update");
+  lua_pushcfunction(L, &gfx_loadpng);
+  lua_setglobal(L, "gfx_loadpng");
+  lua_pushcfunction(L, &gfx_loadjpeg);
+  lua_setglobal(L, "gfx_loadjpeg");
+  /* Surface */
+  lua_pushcfunction(L, &surface_getWindowSurface);
+  lua_setglobal(L, "surface_getWindowSurface");
+  lua_pushcfunction(L, &surface_new);
+  lua_setglobal(L, "surface_new");
+  lua_pushcfunction(L, &surface_clear);
+  lua_setglobal(L, "surface_clear");
+  lua_pushcfunction(L, &surface_fill);
+  lua_setglobal(L, "surface_fill");
+  lua_pushcfunction(L, &surface_copyfrom);
+  lua_setglobal(L, "surface_copyfrom");
+  lua_pushcfunction(L, &surface_get_width);
+  lua_setglobal(L, "surface_get_width");
+  lua_pushcfunction(L, &surface_get_height);
+  lua_setglobal(L, "surface_get_height");
+  lua_pushcfunction(L, &surface_get_pixel);
+  lua_setglobal(L, "surface_get_pixel");
+  lua_pushcfunction(L, &surface_set_pixel);
+  lua_setglobal(L, "surface_set_pixel");
+  lua_pushcfunction(L, &surface_premultiply);
+  lua_setglobal(L, "surface_premultiply");
+  lua_pushcfunction(L, &surface_destroy);
+  lua_setglobal(L, "surface_destroy");
+}
+
 static int
 lua_console(void *ptr) {
   char buff[256];
@@ -27,16 +69,7 @@ lua_console(void *ptr) {
   luaL_openlibs(L);
 
   /* Pushing functions to lua */
-  lua_pushcfunction(L, &gfx_get_memory_limit);
-  lua_setglobal(L, "gfx_get_memory_limit");
-  lua_pushcfunction(L, &surface_new);
-  lua_setglobal(L, "surface_new");
-  lua_pushcfunction(L, &surface_fill);
-  lua_setglobal(L, "surface_fill");
-  lua_pushcfunction(L, &gfx_update);
-  lua_setglobal(L, "gfx_update");
-  lua_pushcfunction(L, &surface_destroy);
-  lua_setglobal(L, "surface_destroy");
+  lua_register_c_functions(L);
 
   while (fgets(buff, sizeof(buff), stdin) != NULL) {
     error = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0

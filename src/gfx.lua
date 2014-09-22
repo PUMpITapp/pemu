@@ -7,30 +7,37 @@ local gfx = {}
 Surface = {}
 
 function Surface:new(w, h)
-  o = {x=0, y=0, w=w, h=h, r=0, g=0, b=0, a=0}
+  o = {}
   self.__index = self
-  self.__cref = surface_new(o.x, o.y, o.w, o.h, o.r, o.g, o.b, o.a)
+  self.__cref = surface_new(w, h)
+  return setmetatable(o, self)
+end
+
+function Surface:getDefaultSurface(w, h)
+  o = {}
+  self.__index = self
+  self.__cref = surface_getWindowSurface()
   return setmetatable(o, self)
 end
 
 function Surface:clear(c, r)
-  print("Not implemented yet.")
+  surface_clear(self.__cref, c, r)
 end
 
 function Surface:fill(c, r)
-  surface_fill(self.__cref, c.r, c.g, c.b, c.a, r.x, r.y, r.w, r.h)
+  surface_fill(self.__cref, c, r)
 end
 
 function Surface:copyfrom(ss, sr, dr, b)
-  print("Not implemented yet.")
+  surface_copyfrom(self.__cref, ss.__cref, sr, dr, b)
 end
 
 function Surface:get_width()
-  return self.w
+  return surface_get_width(self.__cref)
 end
 
 function Surface:get_height()
-  return self.h
+  return surface_get_height(self.__cref)
 end
 
 function Surface:get_pixel(x, y)
@@ -42,7 +49,7 @@ function Surface:set_pixel(x, y, c)
 end
 
 function Surface:premultiply()
-  print("Not implemented yet.")
+  surface_premultiply(self.__cref)
 end
 
 function Surface:destroy()
@@ -53,20 +60,20 @@ end
 --------------------------------------------------------------------------------
 --- GFX Module definitions
 --------------------------------------------------------------------------------
-gfx.screen = Surface:new(640, 480)
+gfx.screen = Surface:getDefaultSurface()
 
 function gfx.set_auto_update()
   return gfx_set_auto_update()
 end
 
-function gfx.new_surface(width, height)
-  if width < 0 or width > 9999 then
+function gfx.new_surface(w, h)
+  if w < 0 or h > 9999 then
     error("invalid width")
   end
-  if height < 0 or height > 9999 then
+  if w < 0 or h > 9999 then
     error("invalid height")
   end
-  return Surface:new(width, height)
+  return Surface:new(w, h)
 end
 
 function gfx.get_memory_use()
