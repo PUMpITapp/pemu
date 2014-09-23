@@ -46,7 +46,7 @@ colorTable_to_uint32t(lua_State *L, int index, SDL_Surface *surface) {
 
 SDL_Rect*
 rectTable_to_SDL_Rect(lua_State *L, int index, int d_w, int d_h) {
-  SDL_Rect* position;
+  SDL_Rect* position = NULL;
 
   luaL_checktype(L, index, LUA_TTABLE);
   

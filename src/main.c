@@ -24,8 +24,6 @@ lua_register_c_functions(lua_State *L) {
   /* GFX */
   lua_pushcfunction(L, &gfx_set_auto_update);
   lua_setglobal(L, "gfx_set_auto_update");
-  lua_pushcfunction(L, &gfx_new_surface);
-  lua_setglobal(L, "gfx_new_surface");
   lua_pushcfunction(L, &gfx_get_memory_use);
   lua_setglobal(L, "gfx_get_memory_use");
   lua_pushcfunction(L, &gfx_get_memory_limit);
@@ -71,6 +69,9 @@ lua_console(void *ptr) {
   /* Pushing functions to lua */
   lua_register_c_functions(L);
 
+  if (luaL_loadfile(L, "lua.lua") || lua_pcall(L, 0, 0, 0))
+    luaL_error(L, "cannot run configuration file: %s", lua_tostring(L, -1));
+
   while (fgets(buff, sizeof(buff), stdin) != NULL) {
     error = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0
       , 0);
@@ -89,6 +90,8 @@ int main(int argc, char *argv[]) {
 
   /* Init SDL and create window */
   SDL_Init(SDL_INIT_VIDEO);
+  IMG_Init(IMG_INIT_JPG|IMG_INIT_PNG);
+
   window = SDL_CreateWindow("PumpITApp!",
                  SDL_WINDOWPOS_UNDEFINED,
                  SDL_WINDOWPOS_UNDEFINED,
@@ -101,6 +104,7 @@ int main(int argc, char *argv[]) {
   sdl_event_loop();
 
   /* Clean everything before finish */
+  IMG_Quit();
   SDL_Quit();
   return 0;
 }

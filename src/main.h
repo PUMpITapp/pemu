@@ -8,7 +8,8 @@
 #include <lauxlib.h>
 #include <lualib.h>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_Thread.H>
+#include <SDL2/SDL_Thread.h>
+#include <SDL2_image/SDL_image.h>
 
 SDL_Window *window;
 

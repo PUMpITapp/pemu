@@ -5,6 +5,7 @@
 #include <lauxlib.h>
 #include <lualib.h>
 #include <SDL2/SDL.h>
+#include <assert.h>
 
 extern SDL_Window *window;
 

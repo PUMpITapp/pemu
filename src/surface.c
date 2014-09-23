@@ -13,7 +13,7 @@ surface_getWindowSurface(lua_State *L) {
 int
 surface_new(lua_State *L) {
   SDL_Surface *surface;
-  
+
   int w = luaL_checknumber(L, 1);
   int h = luaL_checknumber(L, 2);
 
@@ -42,7 +42,7 @@ surface_clear(lua_State *L) {
     position = NULL;
 
   SDL_FillRect(surface, position, color);
-  SDL_BlitSurface(surface, NULL, SDL_GetWindowSurface(window), NULL);
+  /* SDL_BlitSurface(surface, NULL, SDL_GetWindowSurface(window), NULL); */
 
   if (position != NULL)
     free(position);
@@ -58,14 +58,14 @@ surface_fill(lua_State *L) {
 
   surface = (SDL_Surface*)lua_touserdata(L, 1);
   color = colorTable_to_uint32t(L, 2, surface);
-  
+
   if (lua_istable(L, 3))
     position = rectTable_to_SDL_Rect(L, 3, -1, -1);
   else
     position = NULL;
 
   SDL_FillRect(surface, position, color);
-  SDL_BlitSurface(surface, NULL, SDL_GetWindowSurface(window), NULL);
+  /*SDL_BlitSurface(surface, NULL, SDL_GetWindowSurface(window), NULL);*/
 
   if (position != NULL)
     free(position);
@@ -79,17 +79,20 @@ surface_copyfrom(lua_State *L) {
   SDL_Rect *src_rect, *dst_rect;
   int blend = 0;
 
-  src_surface = (SDL_Surface*)lua_touserdata(L, 1);
-  dst_surface = (SDL_Surface*)lua_touserdata(L, 2);
+  dst_surface = (SDL_Surface*)lua_touserdata(L, 1);
+  src_surface = (SDL_Surface*)lua_touserdata(L, 2);
 
   if (lua_istable(L, 3))
     src_rect = rectTable_to_SDL_Rect(L, 3, -1, -1);
   else
     src_rect = NULL;
 
-  if (lua_istable(L, 4))
-    dst_rect = rectTable_to_SDL_Rect(L, 3, src_rect->w, src_rect->h);
-  else {
+  if (lua_istable(L, 4)) {
+    if (src_rect)
+      dst_rect = rectTable_to_SDL_Rect(L, 4, src_rect->w, src_rect->h);
+    else
+      dst_rect = rectTable_to_SDL_Rect(L, 4, src_surface->w, src_surface->h);
+  } else {
     dst_rect = (SDL_Rect*)malloc(sizeof(SDL_Rect));
     dst_rect->x = 0;
     dst_rect->y = 0;
@@ -105,7 +108,14 @@ surface_copyfrom(lua_State *L) {
 
   if (lua_isboolean(L, 5))
     blend = lua_toboolean(L, 5);
-  
+
+  SDL_BlitSurface(src_surface, src_rect, dst_surface, dst_rect);
+
+  if (src_rect)
+    free(src_rect);
+  if (dst_rect)
+    free(dst_rect);
+
   return 0;
 }
 

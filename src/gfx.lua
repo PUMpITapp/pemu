@@ -7,37 +7,47 @@ local gfx = {}
 Surface = {}
 
 function Surface:new(w, h)
-  o = {}
+  o = { cref=surface_new(w, h) }
   self.__index = self
-  self.__cref = surface_new(w, h)
   return setmetatable(o, self)
 end
 
-function Surface:getDefaultSurface(w, h)
-  o = {}
+function Surface:newJPEG(path)
+  o = { cref=gfx_loadjpeg(path) }
   self.__index = self
-  self.__cref = surface_getWindowSurface()
+  return setmetatable(o, self)
+end
+
+function Surface:newPNG(path)
+  o = { cref=gfx_loadpng(path) }
+  self.__index = self
+  return setmetatable(o, self)
+end
+
+function Surface:getDefaultSurface()
+  o = { cref=surface_getWindowSurface() }
+  self.__index = self
   return setmetatable(o, self)
 end
 
 function Surface:clear(c, r)
-  surface_clear(self.__cref, c, r)
+  surface_clear(self.cref, c, r)
 end
 
 function Surface:fill(c, r)
-  surface_fill(self.__cref, c, r)
+  surface_fill(self.cref, c, r)
 end
 
 function Surface:copyfrom(ss, sr, dr, b)
-  surface_copyfrom(self.__cref, ss.__cref, sr, dr, b)
+  surface_copyfrom(self.cref, ss.cref, sr, dr, b)
 end
 
 function Surface:get_width()
-  return surface_get_width(self.__cref)
+  return surface_get_width(self.cref)
 end
 
 function Surface:get_height()
-  return surface_get_height(self.__cref)
+  return surface_get_height(self.cref)
 end
 
 function Surface:get_pixel(x, y)
@@ -49,11 +59,11 @@ function Surface:set_pixel(x, y, c)
 end
 
 function Surface:premultiply()
-  surface_premultiply(self.__cref)
+  surface_premultiply(self.cref)
 end
 
 function Surface:destroy()
-  surface_destroy(self.__cref)
+  surface_destroy(self.cref)
 end
 
 
@@ -89,11 +99,13 @@ function gfx.update()
 end
 
 function gfx.loadpng(path)
-  return gfx_loadpng()
+  --return gfx_loadpng(path)
+  return Surface:newPNG(path)
 end
 
 function gfx.loadjpeg(path)
-  return gfx_loadjpeg()
+  --return gfx_loadjpeg(path)
+  return Surface:newJPEG(path)
 end
 
 return gfx

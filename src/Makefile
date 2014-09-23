@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-c -Wall -Werror -ansi -pedantic
-LDFLAGS=-llua -framework SDL2
+LDFLAGS=-llua -framework SDL2 -framework SDL2_image
 EXEC=pemu
 SRC= $(wildcard *.c)
 OBJ= $(SRC:.c=.o)
