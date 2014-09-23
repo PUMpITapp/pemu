@@ -9,7 +9,7 @@
 
 extern SDL_Window *window;
 
-int surface_getWindowSurface(lua_State*);
+int surface_get_window_surface(lua_State*);
 int surface_new(lua_State*);
 int surface_clear(lua_State*);
 int surface_fill(lua_State*);

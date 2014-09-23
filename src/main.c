@@ -35,8 +35,8 @@ lua_register_c_functions(lua_State *L) {
   lua_pushcfunction(L, &gfx_loadjpeg);
   lua_setglobal(L, "gfx_loadjpeg");
   /* Surface */
-  lua_pushcfunction(L, &surface_getWindowSurface);
-  lua_setglobal(L, "surface_getWindowSurface");
+  lua_pushcfunction(L, &surface_get_window_surface);
+  lua_setglobal(L, "surface_get_window_surface");
   lua_pushcfunction(L, &surface_new);
   lua_setglobal(L, "surface_new");
   lua_pushcfunction(L, &surface_clear);
@@ -87,18 +87,53 @@ lua_console(void *ptr) {
 
 int main(int argc, char *argv[]) {
   SDL_Thread *luaThread = NULL;
+  char *fvalue = NULL;
+  int iflag = 0;
+  int hflag = 0;
+  int index;
+  int c;
 
   /* Init SDL and create window */
   SDL_Init(SDL_INIT_VIDEO);
   IMG_Init(IMG_INIT_JPG|IMG_INIT_PNG);
 
   window = SDL_CreateWindow("PumpITApp!",
-                 SDL_WINDOWPOS_UNDEFINED,
-                 SDL_WINDOWPOS_UNDEFINED,
+                 SDL_WINDOWPOS_CENTERED,
+                 SDL_WINDOWPOS_CENTERED,
                  width, height, SDL_WINDOW_OPENGL);
+
+
+  opterr = 0;
+  while ((c = getopt(argc, argv, "ihf:")) != -1)
+  switch (c) {
+    case 'i':
+      iflag = 1;
+      break;
+    case 'h':
+      hflag = 1;
+      break;
+    case 'f':
+      fvalue = optarg;
+      break;
+    case '?':
+      if (optopt == 'f')
+        fprintf(stderr, "Option -%c requires an argument.\n", optopt);
+      else if (isprint(optopt))
+        fprintf(stderr, "Unknown option `-%c'.\n", optopt);
+      else
+        fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
+      return 1;
+    default:
+      abort();
+  }
+  printf("iflag = %d, hflag = %d, fvalue = %s\n", iflag, hflag, fvalue);
+
+  for (index = optind; index < argc; index++)
+    printf("Non-option argument %s\n", argv[index]);
 
   /* Create the thread running the lua console */
   luaThread = SDL_CreateThread(lua_console, NULL, NULL);
+
 
   /* Start SDL event loop */
   sdl_event_loop();

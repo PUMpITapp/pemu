@@ -8,6 +8,7 @@ gfx_set_auto_update(lua_State *L) {
 
 int
 gfx_get_memory_use(lua_State *L) {
+  lua_pushnumber(L, 0);
   return 1;
 }
 
@@ -25,7 +26,7 @@ gfx_update(lua_State *L) {
 
 int
 gfx_loadpng(lua_State *L) {
-  const char *path = luaL_checklstring(L, 1);
+  const char *path = luaL_checkstring(L, 1);
 
   SDL_Surface *surface = IMG_Load(path);
 

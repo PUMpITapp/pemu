@@ -25,7 +25,7 @@ function Surface:newPNG(path)
 end
 
 function Surface:getDefaultSurface()
-  o = { cref=surface_getWindowSurface() }
+  o = { cref=surface_get_window_surface() }
   self.__index = self
   return setmetatable(o, self)
 end
@@ -99,12 +99,10 @@ function gfx.update()
 end
 
 function gfx.loadpng(path)
-  --return gfx_loadpng(path)
   return Surface:newPNG(path)
 end
 
 function gfx.loadjpeg(path)
-  --return gfx_loadjpeg(path)
   return Surface:newJPEG(path)
 end
 
