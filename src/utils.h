@@ -1,9 +1,9 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
+#include <lua5.2/lua.h>
+#include <lua5.2/lauxlib.h>
+#include <lua5.2/lualib.h>
 #include <SDL2/SDL.h>
 
 uint32_t colorTable_to_uint32t(lua_State*, int, SDL_Surface*);

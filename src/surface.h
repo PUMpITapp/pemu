@@ -1,9 +1,9 @@
 #ifndef SURFACE_H
 #define SURFACE_H
 
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
+#include <lua5.2/lua.h>
+#include <lua5.2/lauxlib.h>
+#include <lua5.2/lualib.h>
 #include <SDL2/SDL.h>
 #include <assert.h>
 

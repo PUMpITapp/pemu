@@ -60,55 +60,50 @@ lua_register_c_functions(lua_State *L) {
 }
 
 static int
-lua_console(void *ptr) {
+lua_console(void *data) {
+  ThreadData *tdata = (ThreadData*)data;
+  lua_State *L = tdata->L;
+  char *file = tdata->file;
   char buff[256];
   int error;
-  lua_State *L = luaL_newstate();
-  luaL_openlibs(L);
 
-  /* Pushing functions to lua */
-  lua_register_c_functions(L);
-
-  if (luaL_loadfile(L, "lua.lua") || lua_pcall(L, 0, 0, 0))
-    luaL_error(L, "cannot run configuration file: %s", lua_tostring(L, -1));
+  if (file != NULL) {
+    if (luaL_loadfile(L, file) || lua_pcall(L, 0, 0, 0))
+      luaL_error(L, "cannot run configuration file: %s", lua_tostring(L, -1));
+  }
 
   while (fgets(buff, sizeof(buff), stdin) != NULL) {
-    error = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0
-      , 0);
+    error = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0, 0);
     if (error) {
       fprintf(stderr, "%s", lua_tostring(L, -1));
-      lua_pop(L, 1);  /* pop error message from the stack */
+      lua_pop(L, 1);
     }
   }
 
-  lua_close(L);
   return 0;
+}
+
+lua_State*
+lua_init() {
+  lua_State *L = luaL_newstate();
+  luaL_openlibs(L);
+  lua_register_c_functions(L);
+  return L;
 }
 
 int main(int argc, char *argv[]) {
   SDL_Thread *luaThread = NULL;
+  lua_State *L = NULL;
+  ThreadData *thread_data = NULL;
   char *fvalue = NULL;
-  int iflag = 0;
   int hflag = 0;
   int index;
   int c;
 
-  /* Init SDL and create window */
-  SDL_Init(SDL_INIT_VIDEO);
-  IMG_Init(IMG_INIT_JPG|IMG_INIT_PNG);
-
-  window = SDL_CreateWindow("PumpITApp!",
-                 SDL_WINDOWPOS_CENTERED,
-                 SDL_WINDOWPOS_CENTERED,
-                 width, height, SDL_WINDOW_OPENGL);
-
-
+  /* Argument option handling */
   opterr = 0;
-  while ((c = getopt(argc, argv, "ihf:")) != -1)
+  while ((c = getopt(argc, argv, "hf:")) != -1)
   switch (c) {
-    case 'i':
-      iflag = 1;
-      break;
     case 'h':
       hflag = 1;
       break;
@@ -126,20 +121,40 @@ int main(int argc, char *argv[]) {
     default:
       abort();
   }
-  printf("iflag = %d, hflag = %d, fvalue = %s\n", iflag, hflag, fvalue);
 
   for (index = optind; index < argc; index++)
     printf("Non-option argument %s\n", argv[index]);
 
-  /* Create the thread running the lua console */
-  luaThread = SDL_CreateThread(lua_console, NULL, NULL);
+  if (hflag) {
+    printf("-- PumpITApp Emulator --\n");
+    printf("-h shows this help.\n");
+    printf("-f [file] loads the LUA file and wait for stddin after the execution.\n");
+    printf("If no arguments, the stdin is waiting for lua code.\n");
+  } else {
+    /* Init SDL and create window */
+    SDL_Init(SDL_INIT_VIDEO);
+    IMG_Init(IMG_INIT_JPG|IMG_INIT_PNG);
+    L = lua_init();
+    window = SDL_CreateWindow("PumpITApp!",
+                   SDL_WINDOWPOS_CENTERED,
+                   SDL_WINDOWPOS_CENTERED,
+                   width, height, SDL_WINDOW_OPENGL);
 
+    thread_data = (ThreadData*)malloc(sizeof(ThreadData));
+    thread_data->L = L;
+    thread_data->file = fvalue;
 
-  /* Start SDL event loop */
-  sdl_event_loop();
+    /* Create the thread running the lua console */
+    luaThread = SDL_CreateThread(lua_console, NULL, (void*)thread_data);
 
-  /* Clean everything before finish */
-  IMG_Quit();
-  SDL_Quit();
+    /* Start SDL event loop */
+    sdl_event_loop();
+
+    /* Clean everything before finish */
+    free(thread_data);
+    lua_close(L);
+    IMG_Quit();
+    SDL_Quit();
+  }
   return 0;
 }
