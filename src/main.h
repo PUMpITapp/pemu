@@ -11,7 +11,7 @@
 #include <lua5.2/lauxlib.h>
 #include <lua5.2/lualib.h>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_Thread.h>
+#include <SDL2/SDL_thread.h>
 #include <SDL2/SDL_image.h>
 
 SDL_Window *window;

@@ -1,10 +1,7 @@
 gfx = require "gfx"
 gfx.screen:clear({255,0,0})
 gfx.update()
-a = gfx.new_surface(100,100)
-a:clear({0,255,0})
-gfx.screen:copyfrom(a, nil, {x=0, y=0})
-gfx.update()
+
 ----gfx.screen:copyfrom(a, {x=0, y=0, w=100, h=100}, {x=200, y=200})
 ----gfx.update()
 img = gfx.loadjpeg("ours.jpg")
