@@ -13,12 +13,11 @@ Installation
 For the moment, the only available platform is OS X.
 
 * OS X
-  1. Make sure you have installed SDL2 Runtime binaries from https://www.libsdl.org/download-2.0.php
-  2. Make sure you have installed LUA (v5.2.3) from http://www.lua.org/download.html. (Dropping the SDL2.framework file into /Library/Frameworks)
-  3. cd src/
+  1. Make sure you have installed SDL2 Runtime binaries from https://www.libsdl.org/download-2.0.php (Dropping the SDL2.framework file into /Library/Frameworks)
+  2. Make sure you have installed SDL2\_image Runtime binaries from https://www.libsdl.org/projects/SDL\_image (Dropping the SDL2\_image.framework file into /Library/Frameworks)
+  3. Make sure you have installed LUA (v5.2.3) from http://www.lua.org/download.html. (Compiled from the source is better ./configure && make macosx test && sudo make install) 
   4. make all
-  5. ./pemu
-  6. A new window should appear and you can write your LUA code in the stdin of your terminal !
+  5. ./pemu -h
 
 * Linux
   TODO ! We should update the Makefile

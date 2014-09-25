@@ -4,7 +4,7 @@ ifeq ($(shell uname),Darwin)
 	# static binary
 	#LDFLAGS=-L./lib/osx -lSDL2 -lSDL2_image -llua -lm -liconv -Wl,-framework,OpenGL -Wl,-framework,ForceFeedback -lobjc -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,IOKit -Wl,-framework,CoreAudio -Wl,-framework,AudioToolbox -Wl,-framework,AudioUnit 
 	# dynamic library loading (lua is static but SDL2* is not)
-	LDFLAGS=-framework SDL2 -framework SDL2_image -llua
+	LDFLAGS=-L/usr/local/lib -F/Library/Frameworks -framework SDL2 -framework SDL2_image -llua
 endif
 ifeq ($(shell uname),Linux)
 	LDFLAGS=-L./lib/linux -lSDL2main -lSDL2_image -llua5.2 -Wl,-rpath,./lib/linux -lSDL2 -lpthread -Wl,--no-undefined -lm -ldl -lts -lpthread -lrt
