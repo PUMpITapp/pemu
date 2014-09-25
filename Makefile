@@ -7,7 +7,8 @@ ifeq ($(shell uname),Darwin)
 	LDFLAGS=-L/usr/local/lib -F/Library/Frameworks -framework SDL2 -framework SDL2_image -llua
 endif
 ifeq ($(shell uname),Linux)
-	LDFLAGS=-L./lib/linux -lSDL2main -lSDL2_image -llua5.2 -Wl,-rpath,./lib/linux -lSDL2 -lpthread -Wl,--no-undefined -lm -ldl -lts -lpthread -lrt
+	#LDFLAGS=-L./lib/linux -lSDL2main -lSDL2_image -llua5.2 -Wl,-rpath,./lib/linux -lSDL2 -lpthread -Wl,--no-undefined -lm -ldl -lts -lpthread -lrt
+	LDFLAGS=-lSDL2main -lSDL2 -lSDL2_image -llua5.2
 endif
 
 EXEC=pemu
