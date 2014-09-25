@@ -2,8 +2,6 @@
 #include "gfx.h"
 #include "surface.h"
 
-static int width = 1024;
-static int height = 768;
 
 static void
 sdl_event_loop() {
@@ -126,10 +124,12 @@ int main(int argc, char *argv[]) {
     printf("Non-option argument %s\n", argv[index]);
 
   if (hflag) {
-    printf("-- PumpITApp Emulator --\n");
-    printf("-h shows this help.\n");
-    printf("-f [file] loads the LUA file and wait for stddin after the execution.\n");
-    printf("If no arguments, the stdin is waiting for lua code.\n");
+    printf("pemu version %d.%d\n", MAJ_VERSION, MIN_VERSION);
+    printf("\nusage: pemu [options]\n");
+    printf("  If no options are specificed, the stddin is waiting for your lua code.\n");
+    printf("\nOPTIONS:\n");
+    printf("  -h shows this help.\n");
+    printf("  -f file loads the LUA file and waits for stddin input after the execution.\n");
   } else {
     /* Init SDL and create window */
     SDL_Init(SDL_INIT_VIDEO);
