@@ -1,7 +1,37 @@
 #include "main.h"
 #include "gfx.h"
 #include "surface.h"
+#include <stdio.h>
+/*#include "events.h" */
 
+lua_State *L;
+
+/* Function for calling Lua function onKey when user presses key */
+int onPressedKey (int x, int y)
+{
+
+  printf("Running function\n");
+
+  /* print x variable */
+  printf( "x variable is %d\n", x );
+
+    /* print y variable */
+  printf( "y variable is %d\n", y );
+
+  /* call the function onKey in Lua file */
+  lua_getglobal(L, "onKey");
+
+  /* the first argument */
+  lua_pushnumber(L, x);
+
+  /* the second argument */
+  lua_pushnumber(L, y);
+
+  /* call the function with 2 arguments, return 1 result */
+  lua_call(L, 2, 1);
+
+  return 1;
+}
 
 static void
 sdl_event_loop() {
@@ -11,8 +41,8 @@ sdl_event_loop() {
     while (notFinished) {
         SDL_WaitEvent(&event);
         switch (event.type) {
-            case SDL_QUIT:
-                notFinished = 0;
+            case SDL_KEYDOWN:
+                onPressedKey(1,2);
         }
     }
 }
@@ -83,13 +113,14 @@ lua_console(void *data) {
 
 lua_State*
 lua_init() {
-  lua_State *L = luaL_newstate();
+  L = luaL_newstate();
   luaL_openlibs(L);
   lua_register_c_functions(L);
   return L;
 }
 
 int main(int argc, char *argv[]) {
+
   SDL_Thread *luaThread = NULL;
   lua_State *L = NULL;
   ThreadData *thread_data = NULL;
