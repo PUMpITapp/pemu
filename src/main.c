@@ -27,24 +27,32 @@ int onPressedKey (int x, int y)
   /* the second argument */
   lua_pushnumber(L, y);
 
-  /* call the function with 2 arguments, return 1 result */
-  lua_call(L, 2, 1);
+  stackDump(L);
+  /* call the function with 2 arguments, return 0 result */
+  if (lua_pcall(L, 2, 0, 0) != 0)
+    printf("error running function `f': %s", lua_tostring(L, -1));
 
   return 1;
 }
 
 static void
 sdl_event_loop() {
-    int notFinished = 1;
-    SDL_Event event;
+  int notFinished = 1;
+  SDL_Event event;
 
-    while (notFinished) {
-        SDL_WaitEvent(&event);
-        switch (event.type) {
-            case SDL_KEYDOWN:
-                onPressedKey(1,2);
-        }
-    }
+  while (notFinished) {
+    SDL_WaitEvent(&event);
+    switch (event.type) {
+      case SDL_KEYDOWN:
+        onPressedKey(1,2);
+        break;
+      case SDL_QUIT:
+        notFinished = 0;
+        break;
+      default:
+        break;
+     }
+  }
 }
 
 static void
@@ -100,6 +108,7 @@ lua_console(void *data) {
       luaL_error(L, "cannot run configuration file: %s", lua_tostring(L, -1));
   }
 
+  /* No input from the user in the console
   while (fgets(buff, sizeof(buff), stdin) != NULL) {
     error = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0, 0);
     if (error) {
@@ -107,6 +116,7 @@ lua_console(void *data) {
       lua_pop(L, 1);
     }
   }
+  */
 
   return 0;
 }
@@ -175,8 +185,10 @@ int main(int argc, char *argv[]) {
     thread_data->L = L;
     thread_data->file = fvalue;
 
+    /* LUA loads the file directly at startup, no thread*/
+    lua_console((void*)thread_data);
     /* Create the thread running the lua console */
-    luaThread = SDL_CreateThread(lua_console, NULL, (void*)thread_data);
+    /* luaThread = SDL_CreateThread(lua_console, NULL, (void*)thread_data); */
 
     /* Start SDL event loop */
     sdl_event_loop();
