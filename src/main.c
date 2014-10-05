@@ -7,22 +7,14 @@
 lua_State *L;
 
 /* Function for calling Lua function onKey when user presses key */
-int onPressedKey (int x, int y)
+int onPressedKey (char *key,  int y)
 {
-
-  printf("Running function\n");
-
-  /* print x variable */
-  printf( "x variable is %d\n", x );
-
-    /* print y variable */
-  printf( "y variable is %d\n", y );
 
   /* call the function onKey in Lua file */
   lua_getglobal(L, "onKey");
 
   /* the first argument */
-  lua_pushnumber(L, x);
+  lua_pushstring(L, key);
 
   /* the second argument */
   lua_pushnumber(L, y);
@@ -44,7 +36,9 @@ sdl_event_loop() {
     SDL_WaitEvent(&event);
     switch (event.type) {
       case SDL_KEYDOWN:
-        onPressedKey(1,2);
+        printf(SDL_GetKeyName(event.key.keysym.sym)); 
+        char *keyPressed = SDL_GetKeyName(event.key.keysym.sym);
+        onPressedKey(keyPressed,1);
         break;
       case SDL_QUIT:
         notFinished = 0;
