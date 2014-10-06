@@ -10,6 +10,18 @@ lua_State *L;
 int onPressedKey (char *key,  int y)
 {
 
+     printf(key);
+  /* Encode the keyboard buttons to be like the box */
+  if(strcmp(key,"Q") == 0) {
+    key = "red";
+  } else if (strcmp(key,"W") == 0){
+    key = "green";
+  } else if(strcmp(key,"E") == 0){
+    key = "yellow";
+  } else if(strcmp(key,"R") == 0){
+    key = "blue";
+  }
+
   /* call the function onKey in Lua file */
   lua_getglobal(L, "onKey");
 

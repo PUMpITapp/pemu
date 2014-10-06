@@ -11,9 +11,9 @@ gfx.update()
 function onKey(key,state)
 	print(key)
 
-	if(key == 'A') then
+	if(key == 'green') then
 	gfx.screen:clear({0,0,255})
-	gfx.update() -- IT CRASHES HERE
+	gfx.update()
 	--continue()
 	end
 end
