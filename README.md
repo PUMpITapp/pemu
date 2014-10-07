@@ -19,9 +19,26 @@ For the moment, the only available platform is OS X.
   4. make all
   5. ./pemu -h
 
-* Linux
-  TODO ! We should update the Makefile
+* Linux (Only works for ubuntu right now. All other linuxbased have to find the source-files and install them seperately)
 
+  1. ctrl + alt + T							//this will open a terminal
+  2. mkdir workspace							//creates a folder called “workspace”
+  3. cd workspace							//now you should be in your workspace folder
+  4. git clone ssh://youid123@pumi-2.ida.liu.se/opt/git/pemu.git	//youid123 should be your liuid
+									//During git clone you will be asked to write yes and your liuID-password.
+									//now you should have a folder named “pemu” if you write the command ls
+									//I now recommend you to copy this folder and put it somewhere else so you wont get any future problem with the repository. 
+									//Open pemu in this new folder through the terminal. You have to be in the "pemu"-folder to continue!
+  5. make
+									//this will give you some errors that you dont have files like sdl2-main, sdl2_image
+  6. sudo apt-get install libsdl2-image-dev
+  7. sudo apt-get install liblua5.2-dev					//During sudo apt-get you will be asked to write in your computer password
+  8. make								//You should now have no errors and a “pemu” file in your folder!
+  9. cp pemu examples
+  10. cd examples
+  11. ./pemu -f lua.lua							//if ./pemu -f lua.lua errors and says something about you not having access rights, 
+									//you could write chmod 755 pemu and then try ./pemu -f lua.lua again. 
+									//You should now be seeing a bear with a red background on your screen. You now have the emulator!
 * Windows
   Not sure how to support Windows for the moment.
 
