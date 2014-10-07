@@ -10,6 +10,7 @@ gfx.update()
 
 function onKey(key,state)
 	print(key)
+	print(state)
 
 	if(key == 'green') then
 	gfx.screen:clear({0,0,255})
