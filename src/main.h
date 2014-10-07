@@ -20,9 +20,4 @@ static int height = 768;
 static int MAJ_VERSION = 1;
 static int MIN_VERSION = 0;
 
-typedef struct {
-  lua_State *L;
-  char *file;
-} ThreadData;
-
 #endif

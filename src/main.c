@@ -48,7 +48,7 @@ sdl_event_loop() {
     SDL_WaitEvent(&event);
     switch (event.type) {
       case SDL_KEYDOWN:
-        printf(SDL_GetKeyName(event.key.keysym.sym)); 
+        printf(SDL_GetKeyName(event.key.keysym.sym));
         char *keyPressed = SDL_GetKeyName(event.key.keysym.sym);
         onPressedKey(keyPressed,1);
         break;
@@ -102,28 +102,11 @@ lua_register_c_functions(lua_State *L) {
 }
 
 static int
-lua_console(void *data) {
-  ThreadData *tdata = (ThreadData*)data;
-  lua_State *L = tdata->L;
-  char *file = tdata->file;
-  char buff[256];
-  int error;
-
+lua_vm_loadfile(char *file) {
   if (file != NULL) {
     if (luaL_loadfile(L, file) || lua_pcall(L, 0, 0, 0))
       luaL_error(L, "cannot run configuration file: %s", lua_tostring(L, -1));
   }
-
-  /* No input from the user in the console
-  while (fgets(buff, sizeof(buff), stdin) != NULL) {
-    error = luaL_loadbuffer(L, buff, strlen(buff), "line") || lua_pcall(L, 0, 0, 0);
-    if (error) {
-      fprintf(stderr, "%s", lua_tostring(L, -1));
-      lua_pop(L, 1);
-    }
-  }
-  */
-
   return 0;
 }
 
@@ -135,11 +118,9 @@ lua_init() {
   return L;
 }
 
-int main(int argc, char *argv[]) {
-
-  SDL_Thread *luaThread = NULL;
+int
+main(int argc, char *argv[]) {
   lua_State *L = NULL;
-  ThreadData *thread_data = NULL;
   char *fvalue = NULL;
   int hflag = 0;
   int index;
@@ -173,7 +154,6 @@ int main(int argc, char *argv[]) {
   if (hflag) {
     printf("pemu version %d.%d\n", MAJ_VERSION, MIN_VERSION);
     printf("\nusage: pemu [options]\n");
-    printf("  If no options are specificed, the stddin is waiting for your lua code.\n");
     printf("\nOPTIONS:\n");
     printf("  -h shows this help.\n");
     printf("  -f file loads the LUA file and waits for stddin input after the execution.\n");
@@ -187,20 +167,13 @@ int main(int argc, char *argv[]) {
                    SDL_WINDOWPOS_CENTERED,
                    width, height, SDL_WINDOW_OPENGL);
 
-    thread_data = (ThreadData*)malloc(sizeof(ThreadData));
-    thread_data->L = L;
-    thread_data->file = fvalue;
-
-    /* LUA loads the file directly at startup, no thread*/
-    lua_console((void*)thread_data);
-    /* Create the thread running the lua console */
-    /* luaThread = SDL_CreateThread(lua_console, NULL, (void*)thread_data); */
+    /* LUA loads the file directly at startup */
+    lua_vm_loadfile(fvalue);
 
     /* Start SDL event loop */
     sdl_event_loop();
 
     /* Clean everything before finish */
-    free(thread_data);
     lua_close(L);
     IMG_Quit();
     SDL_Quit();
