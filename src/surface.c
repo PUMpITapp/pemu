@@ -114,7 +114,7 @@ surface_copyfrom(lua_State *L) {
   if (lua_isboolean(L, 5))
     blend = lua_toboolean(L, 5);
 
-  SDL_BlitSurface(src_surface, src_rect, dst_surface, dst_rect);
+  SDL_BlitScaled(src_surface, src_rect, dst_surface, dst_rect);
 
   if (src_rect)
     free(src_rect);
