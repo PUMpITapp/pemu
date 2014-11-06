@@ -28,6 +28,9 @@ onKeyPressed(lua_State *L, SDL_KeyboardEvent key,  char *state) {
       toLuaKey = "6";
       break;
     case SDLK_7:
+      toLuaKey = "7";
+      break;
+    case SDLK_8:
       toLuaKey = "8";
       break;
     case SDLK_9:
