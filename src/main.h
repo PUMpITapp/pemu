@@ -15,7 +15,7 @@
 #include <SDL2/SDL_image.h>
 
 SDL_Window *window;
-static int width = 1024;
+static int width = 1378;
 static int height = 768;
 static int MAJ_VERSION = 1;
 static int MIN_VERSION = 0;
