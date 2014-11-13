@@ -1,41 +1,10 @@
 #include "main.h"
 #include "gfx.h"
 #include "surface.h"
+#include "onkey.h"
 #include <stdio.h>
-/*#include "events.h" */
 
 lua_State *L;
-
-/* Function for calling Lua function onKey when user presses key */
-int 
-onPressedKey (char *key,  char *state) {
-  /* Encode the keyboard buttons to be like the box */
-  if(strcmp(key,"Q") == 0) {
-    key = "red";
-  } else if (strcmp(key,"W") == 0){
-    key = "green";
-  } else if(strcmp(key,"E") == 0){
-    key = "yellow";
-  } else if(strcmp(key,"R") == 0){
-    key = "blue";
-  }
-
-  /* call the function onKey in Lua file */
-  lua_getglobal(L, "onKey");
-
-  /* the first argument */
-  lua_pushstring(L, key);
-
-  /* the second argument */
-  lua_pushstring(L, state);
-
-  stackDump(L);
-  /* call the function with 2 arguments, return 0 result */
-  if (lua_pcall(L, 2, 0, 0) != 0)
-    printf("error running function `f': %s", lua_tostring(L, -1));
-
-  return 1;
-}
 
 static void
 sdl_event_loop() {
@@ -44,15 +13,12 @@ sdl_event_loop() {
 
   while (notFinished) {
     SDL_WaitEvent(&event);
-    char *keyPressed = SDL_GetKeyName(event.key.keysym.sym);
     switch (event.type) {
       case SDL_KEYDOWN:
-        printf(SDL_GetKeyName(event.key.keysym.sym)); 
-        onPressedKey(keyPressed,"down");
+        onKeyPressed(L, event.key, "down");
         break;
       case SDL_KEYUP:
-        printf(SDL_GetKeyName(event.key.keysym.sym)); 
-        onPressedKey(keyPressed,"up");
+        onKeyPressed(L, event.key, "up");
         break;
       case SDL_QUIT:
         notFinished = 0;

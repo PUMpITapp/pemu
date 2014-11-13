@@ -21,7 +21,7 @@ all: $(EXEC)
 pemu: $(OBJ)
 	$(CC) $^ $(LDFLAGS) -o $@
 
-pemu.o: main.h utils.h surface.h gfx.h
+pemu.o: main.h utils.h surface.h gfx.h onkey.h
 
 %.o: %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
