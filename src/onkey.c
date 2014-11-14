@@ -63,6 +63,9 @@ onKeyPressed(lua_State *L, SDL_KeyboardEvent key,  char *state) {
     case SDLK_t:
       toLuaKey = "white";
       break;
+    case SDLK_RETURN:
+      toLuaKey = "ok";
+      break;
     default:
       break;
   }
