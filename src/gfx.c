@@ -28,8 +28,10 @@ int
 gfx_loadpng(lua_State *L) {
   const char *path = luaL_checkstring(L, 1);
   SDL_Surface *surface = IMG_Load(path);
-  assert(surface != NULL);
-  lua_pushlightuserdata(L, (void*)surface);
+  if (surface != NULL)
+    lua_pushlightuserdata(L, (void*)surface);
+  else
+    lua_pushnil(L);
   return 1;
 }
 
@@ -37,7 +39,9 @@ int
 gfx_loadjpeg(lua_State *L) {
   const char *path = luaL_checkstring(L, 1);
   SDL_Surface *surface = IMG_Load(path);
-  assert(surface != NULL);
-  lua_pushlightuserdata(L, (void*)surface);
+  if (surface != NULL)
+    lua_pushlightuserdata(L, (void*)surface);
+  else
+    lua_pushnil(L);
   return 1;
 }
