@@ -5,66 +5,63 @@ int
 onKeyPressed(lua_State *L, SDL_KeyboardEvent key,  char *state) {
   char *toLuaKey;
 
-  switch(key.keysym.sym) {
-    case SDLK_0:
+  switch(key.keysym.scancode) {
+    case SDL_SCANCODE_0 :
       toLuaKey = "0";
       break;
-    case SDLK_1:
+    case SDL_SCANCODE_1:
       toLuaKey = "1";
       break;
-    case SDLK_2:
+    case SDL_SCANCODE_2:
       toLuaKey = "2";
       break;
-    case SDLK_3:
+    case SDL_SCANCODE_3:
       toLuaKey = "3";
       break;
-    case SDLK_4:
+    case SDL_SCANCODE_4:
       toLuaKey = "4";
       break;
-    case SDLK_5:
+    case SDL_SCANCODE_5:
       toLuaKey = "5";
       break;
-    case SDLK_6:
+    case SDL_SCANCODE_6:
       toLuaKey = "6";
       break;
-    case SDLK_7:
+    case SDL_SCANCODE_7:
       toLuaKey = "7";
       break;
-    case SDLK_8:
+    case SDL_SCANCODE_8:
       toLuaKey = "8";
       break;
-    case SDLK_9:
+    case SDL_SCANCODE_9:
       toLuaKey = "9";
       break;
-    case SDLK_UP:
+    case SDL_SCANCODE_UP:
       toLuaKey = "up";
       break;
-    case SDLK_DOWN:
+    case SDL_SCANCODE_DOWN:
       toLuaKey = "down";
       break;
-    case SDLK_LEFT:
+    case SDL_SCANCODE_LEFT:
       toLuaKey = "left";
       break;
-    case SDLK_RIGHT:
+    case SDL_SCANCODE_RIGHT:
       toLuaKey = "right";
       break;
-    case SDLK_q:
+    case SDL_SCANCODE_Q:
       toLuaKey = "red";
       break;
-    case SDLK_w:
+    case SDL_SCANCODE_W:
       toLuaKey = "green";
       break;
-    case SDLK_e:
+    case SDL_SCANCODE_E:
       toLuaKey = "yellow";
       break;
-    case SDLK_r:
+    case SDL_SCANCODE_R:
       toLuaKey = "blue";
       break;
-    case SDLK_t:
+    case SDL_SCANCODE_T:
       toLuaKey = "white";
-      break;
-    case SDLK_RETURN:
-      toLuaKey = "ok";
       break;
     default:
       break;
