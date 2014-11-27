@@ -7,10 +7,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <assert.h>
-#include "utils.h"
+
+#define RGB_SIZE 4
 
 extern SDL_Window *window;
-static int MEMORY_LIMIT = 1000;
+extern int MEMORY_LIMIT;
+extern int MEMORY_USED;
 
 int gfx_set_auto_update(lua_State *L);
 int gfx_new_surface(lua_State *L);

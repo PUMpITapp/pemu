@@ -1,6 +1,4 @@
 #include "surface.h"
-#include "main.h"
-#include "utils.h"
 
 
 int
@@ -20,6 +18,12 @@ surface_new(lua_State *L) {
 
   surface = SDL_CreateRGBSurface(0,w,h,32,0,0,0,0);
   assert(surface != NULL);
+
+  MEMORY_USED += w * h * RGB_SIZE;
+  if (MEMORY_USED > MEMORY_LIMIT) {
+    fprintf(stdout, "Not enough memory available. Using %d of %d available.\n", MEMORY_USED, MEMORY_LIMIT);
+    exit(EXIT_FAILURE);
+  }
 
   lua_pushlightuserdata(L, (void*)surface);
   return 1;
@@ -159,6 +163,9 @@ int
 surface_destroy(lua_State *L) {
   SDL_Surface *surface = (SDL_Surface*)lua_touserdata(L, 1);
   assert(surface != NULL);
+
+  MEMORY_USED -= surface->w * surface->h * RGB_SIZE;
+
   SDL_FreeSurface(surface);
   return 0;
 }

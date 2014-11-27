@@ -13,10 +13,18 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 #include <SDL2/SDL_image.h>
+#include "gfx.h"
+#include "surface.h"
+#include "onkey.h"
+
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
+#define RGB_SIZE 4
 
 SDL_Window *window;
-static int width = 1280;
-static int height = 720;
+int MEMORY_LIMIT = 10485760;
+int MEMORY_USED = WINDOW_WIDTH * WINDOW_HEIGHT * RGB_SIZE;
+
 static int MAJ_VERSION = 1;
 static int MIN_VERSION = 0;
 

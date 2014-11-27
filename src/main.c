@@ -1,8 +1,4 @@
 #include "main.h"
-#include "gfx.h"
-#include "surface.h"
-#include "onkey.h"
-#include <stdio.h>
 
 lua_State *L;
 
@@ -133,7 +129,7 @@ main(int argc, char *argv[]) {
     window = SDL_CreateWindow("PumpITApp!",
                    SDL_WINDOWPOS_CENTERED,
                    SDL_WINDOWPOS_CENTERED,
-                   width, height, SDL_WINDOW_OPENGL);
+                   WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
 
     /* LUA loads the file directly at startup */
     lua_vm_loadfile(fvalue);

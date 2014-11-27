@@ -6,8 +6,13 @@
 #include <lua5.2/lualib.h>
 #include <SDL2/SDL.h>
 #include <assert.h>
+#include "utils.h"
+
+#define RGB_SIZE 4
 
 extern SDL_Window *window;
+extern int MEMORY_LIMIT;
+extern int MEMORY_USED;
 
 int surface_get_window_surface(lua_State*);
 int surface_new(lua_State*);
