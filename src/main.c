@@ -127,9 +127,9 @@ main(int argc, char *argv[]) {
     IMG_Init(IMG_INIT_JPG|IMG_INIT_PNG);
     L = lua_init();
     window = SDL_CreateWindow("PumpITApp!",
-                   SDL_WINDOWPOS_CENTERED,
-                   SDL_WINDOWPOS_CENTERED,
-                   WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
+                              SDL_WINDOWPOS_CENTERED,
+                              SDL_WINDOWPOS_CENTERED,
+                              WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_OPENGL);
 
     /* LUA loads the file directly at startup */
     lua_vm_loadfile(fvalue);
